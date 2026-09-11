@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Для Альбинки 🍂</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* =========================================================
+     ПАЛИТРА И БАЗОВЫЕ ПЕРЕМЕННЫЕ
+     ========================================================= */
+  :root{
+    --green-dark:#2F4F3A;
+    --green-mid:#3D5A45;
+    --yellow:#F2C14E;
+    --yellow-dark:#E8B84B;
+    --orange:#E08D3C;
+    --orange-dark:#D97A2B;
+    --red:#B84A3A;
+    --red-dark:#A63D2F;
+    --cream:#FBF3E3;
+    --font-head:'Caveat', cursive;
+    --font-body:'Nunito', sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;padding:0;
+    width:100%;height:100%;
+    overflow:hidden;
+    font-family:var(--font-body);
+    background:var(--green-dark);
+    color:var(--cream);
+    -webkit-tap-highlight-color:transparent;
+  }
+  body{
+    background:
+      radial-gradient(1200px 800px at 20% 10%, rgba(224,141,60,.25), transparent 60%),
+      radial-gradient(1000px 700px at 85% 90%, rgba(242,193,78,.20), transparent 55%),
+      linear-gradient(160deg, var(--green-dark) 0%, var(--green-mid) 45%, var(--orange-dark) 130%);
+  }
+  /* лёгкое бумажное зерно поверх фона */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    pointer-events:none;
+    opacity:.05;
+    z-index:0;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  h1,h2,h3{font-family:var(--font-head);font-weight:700;margin:0 0 .3em;line-height:1.1;}
+  p{margin:0 0 .8em;}
+
+  #app{position:fixed;inset:0;}
+
+  .screen{
+    position:absolute;inset:0;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:24px;
+    opacity:0;
+    transform:translateY(12px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .screen.active{
+    display:flex;
+    opacity:1;
+    transform:translateY(0);
+  }
+  .screen-inner{
+    width:100%;
+    max-width:560px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    z-index:2;
+  }
+
+  .card{
+    background:rgba(47,79,58,.55);
+    border:1px solid rgba(242,193,78,.35);
+    backdrop-filter:blur(6px);
+    border-radius:22px;
+    padding:28px 22px;
+    box-shadow:0 20px 50px rgba(0,0,0,.35);
+    animation:breathe 6s ease-in-out infinite;
+  }
+  @keyframes breathe{
+    0%,100%{transform:translateY(0) scale(1);}
+    50%{transform:translateY(-4px) scale(1.005);}
+  }
+
+  .subtitle{
+    font-size:.95rem;
+    opacity:.85;
+    margin-bottom:1.2em;
+  }
+
+  input[type="text"], input[type="password"]{
+    font-family:var(--font-body);
+    font-size:1.05rem;
+    padding:12px 16px;
+    border-radius:14px;
+    border:2px solid var(--yellow-dark);
+    background:rgba(251,243,227,.92);
+    color:var(--green-dark);
+    outline:none;
+    width:100%;
+    max-width:320px;
+    text-align:center;
+  }
+  input[type="text"]:focus, input[type="password"]:focus{
+    border-color:var(--orange);
+    box-shadow:0 0 0 4px rgba(224,141,60,.25);
+  }
+
+  button{
+    font-family:var(--font-body);
+    font-weight:800;
+    font-size:1rem;
+    letter-spacing:.2px;
+    padding:12px 26px;
+    border-radius:999px;
+    border:none;
+    cursor:pointer;
+    color:var(--green-dark);
+    background:linear-gradient(135deg, var(--yellow), var(--orange));
+    box-shadow:0 8px 20px rgba(216,122,43,.35);
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  button:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(216,122,43,.45);}
+  button:active{transform:translateY(0);}
+  button:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+
+  .btn-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:14px;}
+
+  .hint{
+    font-size:.85rem;
+    opacity:.7;
+    margin-top:10px;
+    font-style:italic;
+  }
+
+  .error-msg{
+    color:var(--yellow);
+    font-size:.95rem;
+    min-height:1.4em;
+    margin-top:10px;
+  }
+  .shake{animation:shake .5s;}
+  @keyframes shake{
+    10%,90%{transform:translateX(-1px);}
+    20%,80%{transform:translateX(2px);}
+    30%,50%,70%{transform:translateX(-6px);}
+    40%,60%{transform:translateX(6px);}
+  }
+
+  .pulse{animation:pulse 1.4s ease-in-out infinite;}
+  @keyframes pulse{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.08);}
+  }
+
+  .typewriter{
+    font-size:1.35rem;
+    min-height:2.6em;
+    white-space:pre-wrap;
+  }
+  .typewriter .cursor{
+    display:inline-block;
+    width:2px;
+    background:var(--yellow);
+    margin-left:2px;
+    animation:blink 1s steps(1) infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+
+  /* --------- Летящие сердечки (частицы) --------- */
+  .hearts-layer{
+    position:fixed;inset:0;
+    pointer-events:none;
+    z-index:1;
+    overflow:hidden;
+  }
+  .heart-particle{
+    position:absolute;
+    bottom:-40px;
+    font-size:22px;
+    opacity:.9;
+    animation:floatUp linear forwards;
+    filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));
+  }
+  @keyframes floatUp{
+    0%{transform:translateY(0) translateX(0) rotate(0deg);opacity:0;}
+    10%{opacity:.95;}
+    100%{transform:translateY(-115vh) translateX(var(--drift,0px)) rotate(var(--rot,20deg));opacity:0;}
+  }
+
+  /* --------- Мерцающая гирлянда для финала --------- */
+  .twinkle-layer{
+    position:fixed;inset:0;
+    pointer-events:none;
+    z-index:1;
+    display:none;
+  }
+  .twinkle-layer.on{display:block;}
+  .twinkle{
+    position:absolute;
+    width:8px;height:8px;
+    border-radius:50%;
+    background:var(--yellow);
+    box-shadow:0 0 10px 4px rgba(242,193,78,.7);
+    animation:twinkle 1.6s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:.25;transform:scale(.8);}
+    50%{opacity:1;transform:scale(1.2);}
+  }
+
+  canvas#fireworks-canvas{
+    position:fixed;inset:0;
+    pointer-events:none;
+    z-index:1;
+    display:none;
+  }
+  canvas#fireworks-canvas.on{display:block;}
+
+  /* =========================================================
+     ЭКРАН 0 — ПАРОЛЬ
+     ========================================================= */
+  .lock-icon{font-size:2.6rem;margin-bottom:6px;}
+
+  /* =========================================================
+     ЭКРАН 1 — ПРИВЕТСТВИЕ + ЗМЕЙКА
+     ========================================================= */
+  #snake-wrap{display:none;flex-direction:column;align-items:center;}
+  #snake-wrap.active{display:flex;}
+  #snake-score{
+    font-family:var(--font-head);
+    font-size:1.6rem;
+    color:var(--yellow);
+    margin-bottom:6px;
+  }
+  #snake-canvas{
+    background:rgba(47,79,58,.65);
+    border:3px solid var(--yellow-dark);
+    border-radius:18px;
+    touch-action:none;
+    max-width:92vw;
+    max-height:52vh;
+  }
+  .snake-controls{
+    display:grid;
+    grid-template-columns:56px 56px 56px;
+    grid-template-rows:52px 52px 52px;
+    gap:6px;
+    margin-top:14px;
+  }
+  .snake-controls button{
+    padding:0;font-size:1.3rem;
+    background:rgba(242,193,78,.85);
+  }
+  .heart-transform{
+    font-size:5rem;
+    animation:pop .6s ease;
+  }
+  @keyframes pop{
+    0%{transform:scale(0);}
+    60%{transform:scale(1.2);}
+    100%{transform:scale(1);}
+  }
+
+  /* =========================================================
+     ЭКРАН 3 — НАЙДИ ФАВОРИТОВ
+     ========================================================= */
+  #collage-wrap{
+    position:relative;
+    width:100%;
+    max-width:480px;
+    border-radius:18px;
+    overflow:hidden;
+    border:3px solid var(--yellow-dark);
+    box-shadow:0 12px 30px rgba(0,0,0,.35);
+  }
+  #collage-img{
+    width:100%;display:block;
+    /* ЗАМЕНИТЕ на свой файл — см. переменную COLLAGE_IMAGE_SRC внизу */
+    background:repeating-linear-gradient(45deg, #3D5A45, #3D5A45 12px, #2F4F3A 12px, #2F4F3A 24px);
+    aspect-ratio:5/3;
+    display:flex;align-items:center;justify-content:center;
+    color:rgba(251,243,227,.6);
+    font-size:.95rem;
+    padding:20px;
+    text-align:center;
+  }
+  .hotspot{
+    position:absolute;
+    width:14%;
+    aspect-ratio:1/1;
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+    cursor:pointer;
+    background:rgba(242,193,78,0);
+    border:2px solid rgba(242,193,78,0);
+    transition:background .2s, border-color .2s;
+  }
+  .hotspot.found{
+    background:rgba(242,193,78,.25);
+    border-color:var(--yellow);
+  }
+  #found-counter{
+    margin-top:12px;
+    font-family:var(--font-head);
+    font-size:1.4rem;
+    color:var(--yellow);
+  }
+
+  /* =========================================================
+     ЭКРАН 4 — СУДОКУ + ФИНАЛ
+     ========================================================= */
+  #sudoku-grid{
+    display:grid;
+    grid-template-columns:repeat(9, 1fr);
+    gap:2px;
+    width:min(92vw, 380px);
+    aspect-ratio:1/1;
+    background:var(--yellow-dark);
+    border:3px solid var(--yellow-dark);
+    border-radius:10px;
+    overflow:hidden;
+    margin:0 auto;
+  }
+  .sudoku-cell{
+    background:rgba(251,243,227,.95);
+    color:var(--green-dark);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;
+    font-size:clamp(12px, 3.4vw, 18px);
+    text-align:center;
+    border:none;
+    outline:none;
+    width:100%;height:100%;
+    padding:0;
+  }
+  .sudoku-cell.given{background:rgba(224,141,60,.25);color:var(--green-dark);}
+  .sudoku-cell.wrong{background:rgba(184,74,58,.35);}
+  .sudoku-cell:nth-child(3n){border-right:2px solid var(--green-dark);}
+  .sudoku-cell:nth-child(9n){border-right:none;}
+  .sudoku-row-thick{}
+  #sudoku-msg{min-height:1.6em;margin-top:10px;color:var(--yellow);}
+
+  .finale-buttons{position:relative;height:130px;width:100%;margin-top:10px;}
+  #btn-no, #btn-yes{position:absolute;top:0;}
+  #btn-yes{left:calc(50% - 110px);}
+  #btn-no{left:calc(50% + 20px);}
+
+  .bouquet-emoji{font-size:5rem;margin:10px 0;animation:pop .8s ease;}
+
+  .hidden{display:none !important;}
+
+  @media (max-width:420px){
+    .card{padding:20px 14px;}
+    .typewriter{font-size:1.15rem;}
+    .finale-buttons{height:150px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hearts-layer" id="heartsLayer"></div>
+<div class="twinkle-layer" id="twinkleLayer"></div>
+<canvas id="fireworks-canvas"></canvas>
+
+<div id="app">
+
+  <!-- ================= ЭКРАН 0: ПАРОЛЬ ================= -->
+  <section class="screen active" id="screen-0">
+    <div class="screen-inner">
+      <div class="card">
+        <div class="lock-icon">🔒🍂</div>
+        <h1 id="entry-title">Привет...</h1>
+        <p class="subtitle" id="entry-hint"></p>
+        <form id="password-form" autocomplete="off">
+          <input type="password" id="password-input" placeholder="пароль" />
+          <div class="btn-row"><button type="submit">Войти</button></div>
+        </form>
+        <div class="error-msg" id="password-error"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ЭКРАН 1: ПРИВЕТСТВИЕ + ЗМЕЙКА ================= -->
+  <section class="screen" id="screen-1">
+    <div class="screen-inner">
+      <div class="card" id="welcome-card">
+        <div class="typewriter" id="welcome-text"><span class="cursor">&nbsp;</span></div>
+        <div class="btn-row hidden" id="welcome-continue-wrap">
+          <button id="btn-to-snake">Дальше →</button>
+        </div>
+      </div>
+
+      <div id="snake-wrap">
+        <h2>Уровень 1 · Змейка</h2>
+        <p class="subtitle">Собери <b id="snake-target-label">21</b> очко</p>
+        <div id="snake-score">0</div>
+        <canvas id="snake-canvas" width="300" height="300"></canvas>
+        <div class="snake-controls" id="snake-touch-controls">
+          <div></div><button data-dir="up">▲</button><div></div>
+          <button data-dir="left">◀</button><div></div><button data-dir="right">▶</button>
+          <div></div><button data-dir="down">▼</button><div></div>
+        </div>
+        <div id="snake-done" class="hidden" style="margin-top:14px;">
+          <div class="heart-transform">💛</div>
+          <p id="snake-done-text">Змейка стала сердцем, которое ты у меня украла ойой 😝</p>
+          <button id="btn-to-level2">Перейти на следующий уровень!</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ЭКРАН 2: МУЗЫКАЛЬНЫЙ ================= -->
+  <section class="screen" id="screen-2">
+    <div class="screen-inner">
+      <div class="card">
+        <h2>Уровень 2 · Наша песенка</h2>
+        <div class="typewriter" id="music-prompt-text"><span class="cursor">&nbsp;</span></div>
+        <form id="song-form">
+          <input type="text" id="song-input" placeholder="название песни" />
+          <div class="btn-row"><button type="submit">Проверить</button></div>
+        </form>
+        <div class="error-msg" id="song-error"></div>
+
+        <div id="song-success" class="hidden">
+          <p id="song-success-text" class="typewriter"></p>
+          <audio id="song-audio" controls style="width:100%;margin-top:10px;">
+            <!-- ЗАМЕНИТЕ на путь к своему mp3 — см. переменную SONG_AUDIO_SRC внизу -->
+            Ваш браузер не поддерживает аудио.
+          </audio>
+          <div class="btn-row"><button id="btn-to-level3">Дальше →</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ЭКРАН 3: НАЙДИ ФАВОРИТОВ ================= -->
+  <section class="screen" id="screen-3">
+    <div class="screen-inner">
+      <div class="card">
+        <h2>Уровень 3 · Найди фаворитов</h2>
+        <p class="subtitle" id="favorites-hint">Здесь спрятались 5 твоих любимок, найди и нажми на каждого!</p>
+        <div id="collage-wrap">
+          <div id="collage-img">
+            Место для коллажа.<br>
+            Замените на своё фото — переменная COLLAGE_IMAGE_SRC внизу файла.
+            <!-- 5 точек-кандидатов; после подстановки настоящей картинки
+                 подкорректируйте координаты в CONFIG.favoriteHotspots (в %) -->
+          </div>
+        </div>
+        <div id="found-counter">Найдено: 0 / 5</div>
+        <div class="btn-row hidden" id="favorites-continue-wrap">
+          <button id="btn-to-level4">Дальше →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ЭКРАН 4: СУДОКУ + ФИНАЛ ================= -->
+  <section class="screen" id="screen-4">
+    <div class="screen-inner">
+      <div class="card" id="sudoku-card">
+        <h2>Уровень 4 · Судоку</h2>
+        <p class="subtitle">Развиваем нашу нишевость нишевым хобби. Удачи! ❤️ </p>
+        <div id="sudoku-grid"></div>
+        <div id="sudoku-msg"></div>
+        <div class="btn-row"><button id="btn-check-sudoku">Проверить!</button></div>
+      </div>
+
+      <div class="card hidden" id="gift-ask-card">
+        <div class="typewriter" id="gift-ask-text"><span class="cursor">&nbsp;</span></div>
+        <div class="finale-buttons">
+          <button id="btn-yes" class="hidden">Хоп</button>
+          <button id="btn-no" class="hidden">Нiт</button>
+        </div>
+      </div>
+
+      <div class="card hidden" id="finale-card">
+        <div class="bouquet-emoji">💐</div>
+        <div class="typewriter" id="finale-text"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* =============================================================
+   ================   CONFIG — ВСЁ, ЧТО МЕНЯТЬ ВАМ   =============
+   =============================================================
+   Дальше по файлу — логика игр, её трогать не нужно.
+   Всё, что можно захотеть отредактировать, собрано здесь.
+   ============================================================= */
+const CONFIG = {
+
+  // ---------- ЭКРАН 0: ПАРОЛЬ ----------
+  password: "сельдерей", // регистр не важен, пробелы по краям обрежутся
+  passwordHint: "Введите пароль))) Подсказка: слово, которое мы скажем при встрече",
+  entryTitle: "АЛЬБИНКАА!!!",
+  wrongPasswordMessages: [
+    "Не-а)) а ну ка глянь наши закрепы и попробуй еще разок))",
+    "Ай, снова не то, но не расстраивайси! Дерзай ещё раз",
+    "Неверно, но моя любовь к тебе не стала меньше! Попробуй ещёё"
+  ],
+
+  // ---------- ЭКРАН 1: ПРИВЕТСТВИЕ ----------
+  // Впишите сюда своё поздравление — можно с переносами строк (\n).
+  welcomeText:
+"С днём рождения, моя дорогая Альбинка! 🍂\n\nЯ приготовила для тебя небольшую игру... Надеюсь, ты улыбнешься и получишь удовольствие от неё! Люблю тебяя ❤️ ",
+  snakeTarget: 21,
+  snakeDoneText: "Ухты, змейка стала сердцем, которое ты у меня украла дааа!! 🫶",
+
+  // ---------- ЭКРАН 2: МУЗЫКА ----------
+  musicPromptText: "Теперь впиши название нашей песенкии) На самом деле их у нас много, но эта прям 💔💔💔",
+  songAnswer: "Baby I'm Yours", // варианты написания (без апострофа, регистр и т.п.) принимаются автоматически
+  songWrongMessage: "Она тоже наша, но это не та, что загадала я)) 😈",
+  songSuccessText: "ДААА ты же моя умничка 💋 Давай немножко остановимся и послушаем её вместее!)",
+  // ЗАМЕНИТЕ путь ниже на свой файл с музыкой, положите его рядом с index.html
+  songAudioSrc: "Arctic_Monkeys_-_Baby_Im_Yours_59891423.mp3",
+
+  // ---------- ЭКРАН 3: НАЙДИ ФАВОРИТОВ ----------
+  // ЗАМЕНИТЕ путь ниже на свой коллаж, положите его рядом с index.html
+  collageImageSrc: "photo_2026-09-11_14-47-57.jpg",
+  // Координаты 5 фаворитов в ПРОЦЕНТАХ от размера картинки (x%, y%).
+  // Это только стартовые "заглушки" — после того как вставите свою
+  // картинку, кликните по нужным местам с открытой консолью браузера:
+  // координаты каждого клика будут напечатаны там, скопируйте их сюда.
+  favoriteHotspots: [
+    {x: 95, y: 76, caption: ""},
+    {x: 39, y: 41, caption: ""},
+    {x: 24, y: 62, caption: ""},
+    {x: 78, y: 36, caption: ""},
+    {x: 6, y: 90, caption: ""}
+  ],
+
+  // ---------- ЭКРАН 4: СУДОКУ + ФИНАЛ ----------
+  sudokuSuccessMessage: "УРЫАА, я и не сомневалась, что ты справишься!! 🎉",
+  giftAskText: "Спасибо, что прошла всю игру! Надеюсь, ты развлеклась и хорошо провела время!! С днём рождения ещё раз! Ну и конечно, куда без подарка... \n\nПринять подарок?",
+  finaleText: "Тадаам хпххпа! Ладно, это все шутки, а вот настоящий подарок уже совсем скоро будет у тебя!) 🎁",
+
+  // ---------- ОБЩЕЕ ----------
+  typeSpeedMs: 38 // скорость печатающегося текста (мс на символ)
+};
+/* ============================================================= */
+
+
+/* =============================================================
+   ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ: экраны, сердечки, печатающийся текст
+   ============================================================= */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function spawnHeart(container, xPercent){
+  const heart = document.createElement('div');
+  heart.className = 'heart-particle';
+  const emojis = ['💛','🧡','❤️','🍂'];
+  heart.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+  const left = xPercent !== undefined ? xPercent : Math.random()*100;
+  heart.style.left = left + 'vw';
+  const duration = 4 + Math.random()*3;
+  heart.style.animationDuration = duration + 's';
+  heart.style.setProperty('--drift', (Math.random()*120-60) + 'px');
+  heart.style.setProperty('--rot', (Math.random()*60-30) + 'deg');
+  heart.style.fontSize = (16 + Math.random()*18) + 'px';
+  container.appendChild(heart);
+  setTimeout(()=>heart.remove(), duration*1000 + 200);
+}
+
+function heartBurst(count){
+  const layer = document.getElementById('heartsLayer');
+  for(let i=0;i<count;i++){
+    setTimeout(()=>spawnHeart(layer), i*80);
+  }
+}
+
+// периодические одиночные сердечки для фонового "дыхания"
+setInterval(()=>{
+  if(Math.random()<0.5) spawnHeart(document.getElementById('heartsLayer'));
+}, 2200);
+
+function typeWriter(el, text, speed, onDone){
+  el.innerHTML = '';
+  const cursor = document.createElement('span');
+  cursor.className = 'cursor';
+  cursor.innerHTML = '&nbsp;';
+  let i = 0;
+  const textNode = document.createTextNode('');
+  el.appendChild(textNode);
+  el.appendChild(cursor);
+  function step(){
+    if(i < text.length){
+      textNode.textContent += text[i];
+      i++;
+      setTimeout(step, speed);
+    } else {
+      cursor.remove();
+      if(onDone) onDone();
+    }
+  }
+  step();
+}
+
+function normalize(str){
+  return str
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/['’‘`´]/g, '')
+    .replace(/[^a-zа-яё0-9]/gi, '')
+    .trim();
+}
+
+/* =============================================================
+   ЭКРАН 0 — ПАРОЛЬ
+   ============================================================= */
+document.getElementById('entry-title').textContent = CONFIG.entryTitle;
+document.getElementById('entry-hint').textContent = CONFIG.passwordHint;
+
+document.getElementById('password-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  const val = document.getElementById('password-input').value.trim().toLowerCase();
+  const correct = CONFIG.password.trim().toLowerCase();
+  const errEl = document.getElementById('password-error');
+  if(val === correct){
+    heartBurst(14);
+    setTimeout(()=>{
+      showScreen('screen-1');
+      startWelcome();
+    }, 350);
+  } else {
+    const msgs = CONFIG.wrongPasswordMessages;
+    errEl.textContent = msgs[Math.floor(Math.random()*msgs.length)];
+    const card = document.querySelector('#screen-0 .card');
+    card.classList.remove('shake');
+    void card.offsetWidth;
+    card.classList.add('shake');
+  }
+});
+
+/* =============================================================
+   ЭКРАН 1 — ПРИВЕТСТВИЕ + ЗМЕЙКА
+   ============================================================= */
+let welcomeStarted = false;
+function startWelcome(){
+  if(welcomeStarted) return;
+  welcomeStarted = true;
+  const el = document.getElementById('welcome-text');
+  typeWriter(el, CONFIG.welcomeText, CONFIG.typeSpeedMs, ()=>{
+    document.getElementById('welcome-continue-wrap').classList.remove('hidden');
+  });
+}
+
+document.getElementById('btn-to-snake').addEventListener('click', ()=>{
+  document.getElementById('welcome-card').style.display = 'none';
+  document.getElementById('snake-wrap').classList.add('active');
+  document.getElementById('snake-target-label').textContent = CONFIG.snakeTarget;
+  initSnake();
+});
+
+/* ---------- Игра: Змейка ---------- */
+const snakeCanvas = document.getElementById('snake-canvas');
+const sctx = snakeCanvas.getContext('2d');
+const GRID = 15;
+let cell, snake, dir, nextDir, food, score, snakeTimer, snakeRunning;
+
+function resizeSnakeCanvas(){
+  const size = Math.min(300, window.innerWidth*0.85, window.innerHeight*0.45);
+  snakeCanvas.width = size;
+  snakeCanvas.height = size;
+  cell = size / GRID;
+}
+
+function randomFood(){
+  let pos;
+  do{
+    pos = {x: Math.floor(Math.random()*GRID), y: Math.floor(Math.random()*GRID)};
+  } while(snake.some(s=>s.x===pos.x && s.y===pos.y));
+  return pos;
+}
+
+function initSnake(){
+  resizeSnakeCanvas();
+  snake = [{x:7,y:7},{x:6,y:7},{x:5,y:7}];
+  dir = {x:1,y:0};
+  nextDir = {x:1,y:0};
+  score = 0;
+  document.getElementById('snake-score').textContent = score;
+  food = randomFood();
+  snakeRunning = true;
+  document.getElementById('snake-done').classList.add('hidden');
+  snakeCanvas.style.display = 'block';
+  clearInterval(snakeTimer);
+  snakeTimer = setInterval(snakeStep, 130);
+  drawSnake();
+}
+
+function snakeStep(){
+  if(!snakeRunning) return;
+  dir = nextDir;
+  const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+
+  // столкновение со стеной или собой -> мягкий "рестарт" (без штрафов, это подарок, не должно раздражать)
+  const hitWall = head.x < 0 || head.y < 0 || head.x >= GRID || head.y >= GRID;
+  const hitSelf = snake.some(s=>s.x===head.x && s.y===head.y);
+  if(hitWall || hitSelf){
+    snake = [{x:7,y:7},{x:6,y:7},{x:5,y:7}];
+    dir = {x:1,y:0}; nextDir = {x:1,y:0};
+    food = randomFood();
+    drawSnake();
+    return;
+  }
+
+  snake.unshift(head);
+  if(head.x === food.x && head.y === food.y){
+    score++;
+    document.getElementById('snake-score').textContent = score;
+    food = randomFood();
+    if(score >= CONFIG.snakeTarget){
+      snakeFinish();
+    }
+  } else {
+    snake.pop();
+  }
+  drawSnake();
+}
+
+function drawSnake(){
+  sctx.clearRect(0,0,snakeCanvas.width, snakeCanvas.height);
+  sctx.fillStyle = 'rgba(242,193,78,0.08)';
+  sctx.fillRect(0,0,snakeCanvas.width, snakeCanvas.height);
+
+  // еда — сердечко
+  sctx.font = (cell*0.9) + 'px sans-serif';
+  sctx.textAlign = 'center';
+  sctx.textBaseline = 'middle';
+  sctx.fillText('❤️', food.x*cell + cell/2, food.y*cell + cell/2);
+
+  snake.forEach((s,idx)=>{
+    const t = idx / snake.length;
+    sctx.fillStyle = idx===0 ? '#F2C14E' : `rgba(224,141,60,${1-t*0.5})`;
+    const pad = cell*0.08;
+    roundRect(sctx, s.x*cell+pad, s.y*cell+pad, cell-pad*2, cell-pad*2, cell*0.3);
+    sctx.fill();
+  });
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+
+function snakeFinish(){
+  snakeRunning = false;
+  clearInterval(snakeTimer);
+  snakeCanvas.style.display = 'none';
+  document.getElementById('snake-touch-controls').style.display = 'none';
+  document.getElementById('snake-done-text').textContent = CONFIG.snakeDoneText;
+  document.getElementById('snake-done').classList.remove('hidden');
+  heartBurst(18);
+}
+
+function setSnakeDir(x,y){
+  if(dir.x === -x && dir.y === -y) return; // нельзя развернуться на 180°
+  nextDir = {x,y};
+}
+
+document.addEventListener('keydown', (e)=>{
+  if(!snakeRunning) return;
+  if(e.key==='ArrowUp' || e.key==='w') setSnakeDir(0,-1);
+  else if(e.key==='ArrowDown' || e.key==='s') setSnakeDir(0,1);
+  else if(e.key==='ArrowLeft' || e.key==='a') setSnakeDir(-1,0);
+  else if(e.key==='ArrowRight' || e.key==='d') setSnakeDir(1,0);
+});
+
+document.querySelectorAll('#snake-touch-controls button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const d = btn.dataset.dir;
+    if(d==='up') setSnakeDir(0,-1);
+    if(d==='down') setSnakeDir(0,1);
+    if(d==='left') setSnakeDir(-1,0);
+    if(d==='right') setSnakeDir(1,0);
+  });
+});
+
+// свайпы на самом канвасе
+let touchStartX=0, touchStartY=0;
+snakeCanvas.addEventListener('touchstart', (e)=>{
+  const t = e.changedTouches[0];
+  touchStartX = t.clientX; touchStartY = t.clientY;
+}, {passive:true});
+snakeCanvas.addEventListener('touchend', (e)=>{
+  const t = e.changedTouches[0];
+  const dx = t.clientX - touchStartX;
+  const dy = t.clientY - touchStartY;
+  if(Math.abs(dx) > Math.abs(dy)){
+    setSnakeDir(dx>0?1:-1, 0);
+  } else {
+    setSnakeDir(0, dy>0?1:-1);
+  }
+}, {passive:true});
+
+document.getElementById('btn-to-level2').addEventListener('click', ()=>{
+  showScreen('screen-2');
+  startMusicLevel();
+});
+
+/* =============================================================
+   ЭКРАН 2 — МУЗЫКАЛЬНЫЙ УРОВЕНЬ
+   ============================================================= */
+let musicStarted = false;
+function startMusicLevel(){
+  if(musicStarted) return;
+  musicStarted = true;
+  document.getElementById('song-audio').src = CONFIG.songAudioSrc;
+  typeWriter(document.getElementById('music-prompt-text'), CONFIG.musicPromptText, CONFIG.typeSpeedMs);
+}
+
+document.getElementById('song-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  const val = normalize(document.getElementById('song-input').value);
+  const answer = normalize(CONFIG.songAnswer);
+  const errEl = document.getElementById('song-error');
+  if(val && val === answer){
+    document.getElementById('song-form').classList.add('hidden');
+    errEl.textContent = '';
+    document.getElementById('song-success').classList.remove('hidden');
+    typeWriter(document.getElementById('song-success-text'), CONFIG.songSuccessText, CONFIG.typeSpeedMs);
+    heartBurst(10);
+    const audio = document.getElementById('song-audio');
+    audio.play().catch(()=>{ /* браузер может блокировать автозвук — у пользователя есть свои controls */ });
+  } else {
+    errEl.textContent = CONFIG.songWrongMessage;
+  }
+});
+
+document.getElementById('btn-to-level3').addEventListener('click', ()=>{
+  showScreen('screen-3');
+  startFavoritesLevel();
+});
+
+/* =============================================================
+   ЭКРАН 3 — НАЙДИ ФАВОРИТОВ
+   ============================================================= */
+let favoritesStarted = false;
+let foundCount = 0;
+function startFavoritesLevel(){
+  if(favoritesStarted) return;
+  favoritesStarted = true;
+
+  const imgWrap = document.getElementById('collage-img');
+  if(CONFIG.collageImageSrc){
+    const testImg = new Image();
+    testImg.onload = ()=>{
+      imgWrap.textContent = '';
+      imgWrap.style.background = `url("${CONFIG.collageImageSrc}") center/cover no-repeat`;
+    };
+    testImg.onerror = ()=>{ /* картинка ещё не подставлена — оставляем заглушку */ };
+    testImg.src = CONFIG.collageImageSrc;
+  }
+
+  CONFIG.favoriteHotspots.forEach((spot, idx)=>{
+    const dot = document.createElement('div');
+    dot.className = 'hotspot';
+    dot.style.left = spot.x + '%';
+    dot.style.top = spot.y + '%';
+    dot.dataset.idx = idx;
+    dot.addEventListener('click', ()=>onHotspotClick(dot, idx));
+    document.getElementById('collage-wrap').appendChild(dot);
+  });
+
+  // помощник для калибровки координат: кликните по картинке
+  // с открытой консолью браузера — там появится % координата клика
+  document.getElementById('collage-wrap').addEventListener('click', (e)=>{
+    const rect = e.currentTarget.getBoundingClientRect();
+    const xp = ((e.clientX - rect.left)/rect.width*100).toFixed(1);
+    const yp = ((e.clientY - rect.top)/rect.height*100).toFixed(1);
+    console.log(`Координата клика по коллажу: x=${xp}%, y=${yp}%`);
+  });
+}
+
+function onHotspotClick(dot, idx){
+  if(dot.classList.contains('found')) return;
+  dot.classList.add('found');
+  foundCount++;
+  heartBurst(6);
+  document.getElementById('found-counter').textContent = `Найдено: ${foundCount} / 5`;
+  if(foundCount >= 5){
+    document.getElementById('favorites-continue-wrap').classList.remove('hidden');
+  }
+}
+
+document.getElementById('btn-to-level4').addEventListener('click', ()=>{
+  showScreen('screen-4');
+  initSudoku();
+});
+
+/* =============================================================
+   ЭКРАН 4 — СУДОКУ
+   ============================================================= */
+// Решение (классический пример, лёгкий/средний уровень сложности)
+const SUDOKU_SOLUTION = [
+  [8,7,4,5,3,9,6,1,2],
+  [6,9,5,8,1,2,7,4,3],
+  [3,1,2,7,6,4,5,8,9],
+  [7,3,8,9,4,1,6,2,5],
+  [5,6,1,2,8,7,9,3,4],
+  [2,4,9,6,5,3,8,7,1],
+  [9,5,7,4,2,6,3,1,8],
+  [4,8,6,1,7,9,2,5,3],
+  [1,2,3,8,5,6,4,9,7]
+];
+// Пазл: 0 = пустая клетка, которую нужно заполнить
+const SUDOKU_PUZZLE = [
+  [0,7,4,0,0,0,6,1,0],
+  [6,9,5,8,0,2,7,4,3],
+  [3,1,0,7,6,4,0,8,9],
+  [7,3,0,0,4,0,0,2,5],
+  [5,6,0,0,0,0,0,3,4],
+  [0,4,9,0,0,0,8,7,0],
+  [0,0,7,4,0,6,3,0,0],
+  [0,0,0,1,7,9,0,0,0],
+  [0,0,0,0,5,0,0,0,0]
+];
+
+let sudokuStarted = false;
+function initSudoku(){
+  if(sudokuStarted) return;
+  sudokuStarted = true;
+  const grid = document.getElementById('sudoku-grid');
+  for(let r=0;r<9;r++){
+    for(let c=0;c<9;c++){
+      const val = SUDOKU_PUZZLE[r][c];
+      const input = document.createElement('input');
+      input.className = 'sudoku-cell';
+      input.setAttribute('inputmode','numeric');
+      input.setAttribute('maxlength','1');
+      input.dataset.row = r;
+      input.dataset.col = c;
+      if(val !== 0){
+        input.value = val;
+        input.disabled = true;
+        input.classList.add('given');
+      } else {
+        input.addEventListener('input', (e)=>{
+          e.target.value = e.target.value.replace(/[^1-9]/g,'').slice(0,1);
+          e.target.classList.remove('wrong');
+        });
+      }
+      grid.appendChild(input);
+    }
+  }
+}
+
+document.getElementById('btn-check-sudoku').addEventListener('click', ()=>{
+  const cells = document.querySelectorAll('.sudoku-cell');
+  let allCorrect = true;
+  let allFilled = true;
+  cells.forEach(cell=>{
+    const r = +cell.dataset.row, c = +cell.dataset.col;
+    if(!cell.value){ allFilled = false; return; }
+    if(+cell.value !== SUDOKU_SOLUTION[r][c]){
+      allCorrect = false;
+      cell.classList.add('wrong');
+    } else {
+      cell.classList.remove('wrong');
+    }
+  });
+  const msgEl = document.getElementById('sudoku-msg');
+  if(!allFilled){
+    msgEl.textContent = 'Заполни все клетки :)';
+  } else if(allCorrect){
+    msgEl.textContent = CONFIG.sudokuSuccessMessage;
+    heartBurst(16);
+    setTimeout(showGiftAsk, 900);
+  } else {
+    msgEl.textContent = 'Пока не сходится — попробуй ещё раз';
+  }
+});
+
+/* =============================================================
+   ФИНАЛ: "Принять подарок?"
+   ============================================================= */
+function showGiftAsk(){
+  document.getElementById('sudoku-card').classList.add('hidden');
+  const askCard = document.getElementById('gift-ask-card');
+  askCard.classList.remove('hidden');
+  typeWriter(document.getElementById('gift-ask-text'), CONFIG.giftAskText, CONFIG.typeSpeedMs, ()=>{
+    document.getElementById('btn-yes').classList.remove('hidden');
+    document.getElementById('btn-no').classList.remove('hidden');
+    document.getElementById('btn-yes').classList.add('pulse');
+    placeNoButton();
+  });
+}
+
+function placeNoButton(){
+  const wrap = document.querySelector('.finale-buttons');
+  const noBtn = document.getElementById('btn-no');
+  const wrapRect = wrap.getBoundingClientRect();
+  const maxX = Math.max(0, wrapRect.width - 90);
+  const maxY = Math.max(0, wrapRect.height - 46);
+  const x = Math.random()*maxX;
+  const y = Math.random()*maxY;
+  noBtn.style.left = x + 'px';
+  noBtn.style.top = y + 'px';
+}
+
+function fleeIfNear(clientX, clientY){
+  const noBtn = document.getElementById('btn-no');
+  if(noBtn.classList.contains('hidden')) return;
+  const r = noBtn.getBoundingClientRect();
+  const cx = r.left + r.width/2, cy = r.top + r.height/2;
+  const dist = Math.hypot(clientX-cx, clientY-cy);
+  if(dist < 90){
+    placeNoButton();
+  }
+}
+document.addEventListener('mousemove', (e)=>fleeIfNear(e.clientX, e.clientY));
+document.getElementById('btn-no').addEventListener('touchstart', (e)=>{
+  e.preventDefault();
+  placeNoButton();
+}, {passive:false});
+document.getElementById('btn-no').addEventListener('click', (e)=>{
+  // на случай если всё же кто-то умудрится нажать — тоже убегаем, "Нет" не нажимается
+  e.preventDefault();
+  placeNoButton();
+});
+
+document.getElementById('btn-yes').addEventListener('click', ()=>{
+  document.getElementById('gift-ask-card').classList.add('hidden');
+  const finaleCard = document.getElementById('finale-card');
+  finaleCard.classList.remove('hidden');
+  document.getElementById('twinkleLayer').classList.add('on');
+  spawnTwinkles();
+  launchFireworks();
+  heartBurst(30);
+  typeWriter(document.getElementById('finale-text'), CONFIG.finaleText, CONFIG.typeSpeedMs);
+});
+
+function spawnTwinkles(){
+  const layer = document.getElementById('twinkleLayer');
+  layer.innerHTML = '';
+  for(let i=0;i<26;i++){
+    const dot = document.createElement('div');
+    dot.className = 'twinkle';
+    dot.style.left = Math.random()*100 + 'vw';
+    dot.style.top = Math.random()*100 + 'vh';
+    dot.style.animationDelay = (Math.random()*1.6) + 's';
+    layer.appendChild(dot);
+  }
+}
+
+/* ---------- Салют на canvas ---------- */
+const fwCanvas = document.getElementById('fireworks-canvas');
+const fwCtx = fwCanvas.getContext('2d');
+let fwParticles = [];
+let fwRunning = false;
+
+function resizeFw(){
+  fwCanvas.width = window.innerWidth;
+  fwCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeFw);
+resizeFw();
+
+function launchFireworks(){
+  fwCanvas.classList.add('on');
+  fwRunning = true;
+  let bursts = 0;
+  const burstInterval = setInterval(()=>{
+    createBurst(
+      Math.random()*fwCanvas.width,
+      Math.random()*fwCanvas.height*0.5 + fwCanvas.height*0.1
+    );
+    bursts++;
+    if(bursts >= 7) clearInterval(burstInterval);
+  }, 500);
+  requestAnimationFrame(fwLoop);
+  setTimeout(()=>{ fwRunning = false; fwCanvas.classList.remove('on'); }, 6000);
+}
+
+function createBurst(x,y){
+  const colors = ['#F2C14E','#E08D3C','#B84A3A','#FBF3E3'];
+  const count = 40;
+  for(let i=0;i<count;i++){
+    const angle = (Math.PI*2*i)/count;
+    const speed = 2 + Math.random()*3;
+    fwParticles.push({
+      x, y,
+      vx: Math.cos(angle)*speed,
+      vy: Math.sin(angle)*speed,
+      life: 60 + Math.random()*20,
+      color: colors[Math.floor(Math.random()*colors.length)]
+    });
+  }
+}
+
+function fwLoop(){
+  fwCtx.clearRect(0,0,fwCanvas.width, fwCanvas.height);
+  fwParticles.forEach(p=>{
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.03;
+    p.life -= 1;
+    fwCtx.globalAlpha = Math.max(p.life/70, 0);
+    fwCtx.fillStyle = p.color;
+    fwCtx.beginPath();
+    fwCtx.arc(p.x, p.y, 2.4, 0, Math.PI*2);
+    fwCtx.fill();
+  });
+  fwCtx.globalAlpha = 1;
+  fwParticles = fwParticles.filter(p=>p.life > 0);
+  if(fwRunning || fwParticles.length){
+    requestAnimationFrame(fwLoop);
+  }
+}
+
+window.addEventListener('resize', ()=>{ if(document.getElementById('snake-wrap').classList.contains('active')) resizeSnakeCanvas(); });
+</script>
+</body>
+</html>
